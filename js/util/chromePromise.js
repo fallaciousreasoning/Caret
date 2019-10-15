@@ -1,6 +1,31 @@
 define(function() {
   "use strict";
 
+  const settingsStorage = {
+    get: async function(keys) {
+      // chrome.storage had a special case where undefined keys returns
+      // everything in storage.
+      if (!keys)
+        return { ...localStorage };
+
+      // TODO(fallaciousreasoning): Use localForage.
+      if (keys.length !== 1)
+        throw new Error("I should probably deal with this...");
+
+      const item = localStorage.getItem(keys[0]);
+      return JSON.parse(item);
+    },
+    set: async function(items) {
+      // TODO(fallaciousreasoning): Use localForage.
+      for (const key of Object.keys(items))
+        localStorage.setItem(key, JSON.stringify(items[key]));
+    },
+    remove: async function(key) {
+      // TODO(fallaciousreasoning): Use localForage.
+      delete localStorage[key];
+    }
+  };
+
   var ch = {
     fileSystem: {
       chooseEntry: function(options) {
@@ -62,59 +87,10 @@ define(function() {
     },
 
     storage: {
-      sync: {
-        get: function(keys) {
-          return new Promise(function(ok, fail) {
-            chrome.storage.sync.get(keys, function(data) {
-              if (chrome.runtime.lastError) return fail(chrome.runtime.lastError);
-              ok(data);
-            });
-          });
-        },
-        set: function(items) {
-          return new Promise(function(ok, fail) {
-            chrome.storage.sync.set(items, function() {
-              if (chrome.runtime.lastError) return fail(chrome.runtime.lastError);
-              ok();
-            });
-          });
-        },
-        remove: function(key) {
-          return new Promise(function(ok, fail) {
-            chrome.storage.sync.remove(key, function() {
-              if (chrome.runtime.lastError) return fail(chrome.runtime.lastError);
-              ok();
-            });
-          });
-        }
-      },
-
-      local: {
-        get: function(keys) {
-          return new Promise(function(ok, fail) {
-            chrome.storage.local.get(keys, function(data) {
-              if (chrome.runtime.lastError) return fail(chrome.runtime.lastError);
-              ok(data);
-            });
-          });
-        },
-        set: function(items) {
-          return new Promise(function(ok, fail) {
-            chrome.storage.local.set(items, function() {
-              if (chrome.runtime.lastError) return fail(chrome.runtime.lastError);
-              ok();
-            });
-          });
-        },
-        remove: function(key) {
-          return new Promise(function(ok, fail) {
-            chrome.storage.local.remove(key, function() {
-              if (chrome.runtime.lastError) return fail(chrome.runtime.lastError);
-              ok();
-            });
-          });
-        }
-      }
+      // TODO(fallaciousreasoning): Remove sync storage, doesn't make sense on
+      // the web.
+      sync: settingsStorage,
+      local: settingsStorage
     }
   };
 
