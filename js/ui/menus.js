@@ -27,11 +27,7 @@ define([
         fragment.appendChild(preset);
         continue;
       }
-      //version testing to hide entries that this version of Chrome can't run
-      //originally for project support, should remove soon
-      if (entry.minVersion && entry.minVersion > chrome.version) {
-        continue;
-      }
+      
       var isAce = entry.command == "ace:command";
       var keyCombo = isAce ? findKeyCombo(entry.argument) : findKeyCombo(entry.command, entry.argument);
       if (keyCombo && platform == "mac") {
