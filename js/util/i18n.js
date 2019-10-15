@@ -1,9 +1,32 @@
 define(function() {
 
   var translationCache = {};
+  let translationsFile = undefined;
 
-  // TODO(fallaciousreasoning): Support translations.
-  const getTranslatedMessage = (message, subs) => message;
+  // Load translations from the server.
+  (async () => {
+    let lang = navigator.language.split('-')[0];
+
+    let response = await fetch(`/_locales/${lang}/messages.json`);
+    // Fallback to english for unsupported languages.
+    if (!response.ok) {
+      response = await fetch(`/_locales/en/messages.json`)
+    }
+
+    translationsFile = await response.json();
+  })();
+
+  const getTranslatedMessage = (message, subs) => {
+    // TODO(fallaciousreasoning): Fix race condition where translations are not loaded when this is called.
+    if (!translationsFile)
+      return message;
+
+    const translation = translationsFile[message];
+    if (!translation)
+      return message;
+
+    return translation.message ? translation.message : translation;
+  };
   
   return {
     //process a chunk of template HTML for i18n strings
