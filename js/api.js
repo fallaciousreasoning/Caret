@@ -39,10 +39,4 @@ define([
       c(chrome.runtime.lastError);
     });
   });
-
-  //External apps can send messages by matching Caret's command/argument config objects
-  chrome.runtime.onMessageExternal.addListener(async function(message, sender, c = noop) {
-    var result = await command.fire(message.command, message.argument);
-    c(null, result);
-  });
 });
