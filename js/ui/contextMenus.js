@@ -1,5 +1,6 @@
 define(function() {
-
+  // TODO(fallaciousreasoning): Support context menus somehow.
+  return;
   //track all assigned context menus in order to respond
   var registry = {};
   var appID = chrome.runtime.id;
