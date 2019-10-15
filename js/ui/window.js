@@ -3,8 +3,6 @@ define([
   "storage/settingsProvider"
 ], function(command, Settings) {
 
-  var frame = chrome.app.window.current();
-
   var setTheme = async function() {
     var data = await Settings.pull("user");
     var themes = {
@@ -18,24 +16,13 @@ define([
   };
   setTheme();
   command.on("init:restart", setTheme);
-
-  command.on("app:minimize", function() {
-    frame.minimize();
-    editor.focus();
-  });
-
-  command.on("app:maximize", function() {
-    frame.isMaximized() || frame.isFullscreen() ? frame.restore() : frame.maximize();
-    document.body.classList.toggle("fullscreened", !frame.isMaximized());
-    editor.focus();
-  });
   
-  if (frame.isMaximized() || frame.isFullscreen()) {
+  if (document.fullscreenElement) {
     document.body.classList.add("fullscreened");
   }
 
   command.on("app:restart", function() {
-    chrome.runtime.reload();
+    location.reload();
   });
 
   //developer command for reloading CSS
@@ -55,14 +42,10 @@ define([
     });
   }
 
-  frame.onFullscreened.addListener(onFullscreen);
-  if (frame.isFullscreen()) {
-    onFullscreen();
-  }
-
-  frame.onRestored.addListener(function() {
-    document.body.classList.remove("fullscreen");
-    document.body.classList.remove("immersive");
+  // Handle fullscreen changes.
+  document.addEventListener('fullscreenchange', event => {
+    if (document.fullscreenElement)
+     onFullscreen();
   });
 
   //kill middle clicks if not handled
