@@ -9,10 +9,11 @@ define(function() {
         return { ...localStorage };
 
       // TODO(fallaciousreasoning): Use localForage.
-      if (keys.length !== 1)
-        throw new Error("I should probably deal with this...");
+      if (Array.isArray(keys)) {
+        throw new Error(`I should probably deal with this... (keys were ${keys})`);
+      }
 
-      const item = localStorage.getItem(keys[0]);
+      const item = localStorage.getItem(keys);
       return JSON.parse(item);
     },
     set: async function(items) {

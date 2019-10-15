@@ -158,7 +158,7 @@ define([
 
     initRetained: async function() {
       var data = await chromeP.storage.local.get("retainedProject");
-      if (data.retainedProject) {
+      if (data && data.retainedProject) {
         var retained = data.retainedProject;
         if (typeof retained == "string") {
           retained = {
