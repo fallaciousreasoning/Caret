@@ -1,49 +1,19 @@
 {
   "name": "Caret",
   "description": "Professional text editing for Chrome and Chrome OS",
-  "version": "1.8.21",
-  "manifest_version": 2,
-  "default_locale": "en",
-  "icons": {
-    "128": "icon-128.png"
-  },
-  "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCh9A0p0K76KGXnEYMf4tVxhHUBXQTRh984XrkVSuzX6Tp4al9cj7NgXh3Sjx+0+KctLzpmvCw9bwgWueAE13LhjQ+dJONaR5xhte0KTAfaVRGV5EKCBx6KwzcaBGWBHv3V1b/8CbTENivW3/eVTg0/gmyB0tzfqzEoXy/lnRkZdQIDAQAB",
-  "update_url": "http://thomaswilburn.net/caret/updates.xml",
-  "app": {
-    "background": {
-      "scripts": [
-        "background.js"
-      ]
-    }
-  },
-  "permissions": [
-    "clipboardRead",
-    "clipboardWrite",
-    "contextMenus",
-    "storage",
-    "notifications",
-    "syncFileSystem",
-    "app.window.fullscreen.overrideEsc",
+  "start_url": "/main",
+  "scope": "/",
+  "display": "fullscreen",
+  "icons": [
     {
-      "fileSystem": [
-        "write",
-        "retainEntries",
-        "directory"
-      ]
+      "src": "/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
     }
-  ],
-  "kiosk_enabled": false,
-  "offline_enabled": true,
-  "file_handlers": {
-    "text": {
-      "types": [
-        "application/javascript",
-        "application/json",
-        "application/x-shellscript",
-        "application/xml",
-        "message/rfc822",
-        "text/*"
-      ]
-    }
-  }
+  ]
 }
