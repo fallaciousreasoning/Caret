@@ -30,28 +30,16 @@ define([
       this.entry = entry;
     },
     
-    read: function() {
-      var self = this;
+    read: async function() {
+      if (!this.entry)
+        throw new Error("File not opened");
       
-      return new Promise(function(ok, fail) {
-        if (!self.entry) {
-          console.error(self);
-          fail("File not opened");
-        }
-        var reader = new FileReader();
-        reader.onload = function() {
-          ok(reader.result);
-        };
-        reader.onerror = function(err) {
-          console.error("File read error!");
-          fail(err);
-        };
-        self.entry.file(function(f) {
-          reader.readAsText(f);
-        }, function(err) {
-          console.error("File read error!");
-          fail(err);
-        });
+      const file = await this.entry.getFile();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsText(file);
       });
     },
     
