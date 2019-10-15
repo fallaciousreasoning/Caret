@@ -116,7 +116,7 @@ define([
   var defaultFontSize = function(c = noop) {
     var size = Settings.get("user").fontSize;
     editor.container.style.fontSize = size ? size + "px" : null;
-    c();
+    if (c) c();
   };
   
   var adjustFontSize = function(delta, c = noop) {
@@ -128,7 +128,7 @@ define([
     }
     var adjusted = current + delta;
     editor.container.style.fontSize = adjusted + "px";
-    c();
+    if (c) c();
   };
   
   command.on("editor:default-zoom", defaultFontSize);
@@ -141,7 +141,7 @@ define([
     editor.setTheme("ace/theme/" + theme);
     themes.value = theme;
     editor.focus();
-    c();
+    if (c) c();
   });
   
   command.on("editor:print", function(c = noop) {
@@ -172,7 +172,7 @@ define([
     var words = text.match(/([\u0080-\uFFFF\w]\u0027?)+/g);
     words = words ? words.length : 0;
     command.fire("status:toast", i18n.get("editorWordCount", characters, words, lines));
-    c();
+    if (c) c();
   });
   
   return editor;
