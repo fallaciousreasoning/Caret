@@ -54,6 +54,7 @@ define(function() {
       }
     },
 
+    // TODO(fallaciousreasoning): Completely remove this.
     notifications: {
       create: function(id, options) {
         return new Promise(ok => chrome.notifications.create(id, options, ok));
