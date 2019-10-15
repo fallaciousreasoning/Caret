@@ -33,8 +33,8 @@ define(function() {
         return window.chooseFileSystemEntries(options);
 
       },
-      getDisplayPath: function(entry) {
-        return new Promise(ok => chrome.fileSystem.getDisplayPath(entry, ok));
+      getDisplayPath: async function(entry) {
+        return entry.name;
       },
       getWritableEntry: function(entry) {
         return new Promise(ok => chrome.fileSystem.getWritableEntry(entry, ok));
