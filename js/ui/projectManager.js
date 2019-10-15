@@ -72,50 +72,27 @@ define([
     },
 
     //walk will asynchronously collect the file tree
-    walk: function(blacklist, done) {
-      var self = this;
-      var entries = [];
-      var reader = this.entry.createReader();
-      var inc = 1;
-
-      var check = function() {
-        inc--;
-        if (inc == 0) {
-          return done(self);
+    walk: async function(blacklist, done) {
+      for await (const entry of this.entry.getEntries()) {
+        //skip dot dirs, but not files
+        if (!Settings.get("user").showHiddenDirectories) {
+          if (entry.name[0] == "." && entry.isDirectory) return;
         }
-      };
 
-      var collect = function(list) {
-        if (list.length == 0) return complete();
-        entries.push.apply(entries, list);
-        reader.readEntries(collect);
-      };
+        //skip ignored files
+        if (blacklist) {
+          if (blacklist.test(entry.name)) continue;
+        }
 
-      var complete = async function() {
-        self.children = [];
-        var walking = entries.map(async function(entry) {
-          //skip dot dirs, but not files
-          if (!Settings.get("user").showHiddenDirectories) {
-            if (entry.name[0] == "." && entry.isDirectory) return;
-          }
-          //skip ignored files
-          if (blacklist) {
-            if (blacklist.test(entry.name)) return;
-          }
+        const node = new FSNode(entry);
+        node.displayPath = `${this.displayPath}/${entry.name}`;
+        this.children.push(node);
 
-          var node = new FSNode(entry);
-          node.displayPath = await chromeP.fileSystem.getDisplayPath(entry);
-          self.children.push(node);
-          if (node.isDirectory) {
-            inc++;
-            //give the UI thread a chance to breathe
-            tick(function() { node.walk(blacklist, check); });
-          }
-        });
-        await Promise.all(walking);
-        check();
-      };
-      reader.readEntries(collect);
+        if (node.isDirectory)
+          await node.walk(blacklist, () => {});
+      }
+
+      done(this);
     }
   };
 
@@ -283,7 +260,8 @@ define([
           var nodeData = {
             label: node.label,
             path: node.entry.fullPath,
-            contextMenu: context.makeURL(isRoot ? "root/directory" : "directory", node.id)
+            // TODO(fallaciousreasoning): Support context menus.
+            // contextMenu: context.makeURL(isRoot ? "root/directory" : "directory", node.id)
           };
           var a = inflate.get("templates/projectDir.html", nodeData);
           li.appendChild(a);
@@ -308,7 +286,8 @@ define([
           var nodeData = {
             path: node.entry.fullPath,
             displayPath: node.displayPath,
-            contextMenu: context.makeURL("file", node.entry.fullPath.replace(/[\/\\]/g, "@")),
+            // TODO(fallaciousreasoning): Support context menus.
+            // contextMenu: context.makeURL("file", node.entry.fullPath.replace(/[\/\\]/g, "@")),
             className: current.path && current.path.endsWith(node.entry.fullPath) ? "active-file" : "",
             label: node.label
           };
