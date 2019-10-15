@@ -131,10 +131,11 @@ define([
 
   command.on("session:close-to-right", closeTabsRight);
 
-  contextMenus.register(i18n.get("tabClose"), "closeTab", "tabs/:id", args => command.fire("session:close-tab", args.id));
-  contextMenus.register(i18n.get("tabCloseRight"), "closeTabsRight", "tabs/:id", args => closeTabsRight(args.id));
-  contextMenus.register(i18n.get("tabCopyPath"), "copyFilePath", "tabs/:id", args => copyFilePath(args.id));
-  contextMenus.register(i18n.get("tabRevealInSideBar"), "revealInSideBar", "tabs/:id", args => command.fire("session:reveal-in-side-bar", args));
+  // TODO(fallaciousreasoning): Support context menus.
+  // contextMenus.register(i18n.get("tabClose"), "closeTab", "tabs/:id", args => command.fire("session:close-tab", args.id));
+  // contextMenus.register(i18n.get("tabCloseRight"), "closeTabsRight", "tabs/:id", args => closeTabsRight(args.id));
+  // contextMenus.register(i18n.get("tabCopyPath"), "copyFilePath", "tabs/:id", args => copyFilePath(args.id));
+  // contextMenus.register(i18n.get("tabRevealInSideBar"), "revealInSideBar", "tabs/:id", args => command.fire("session:reveal-in-side-bar", args));
 
   return function() {
     enableTabDragDrop();

@@ -596,7 +596,8 @@ define([
   command.on("session:active-tab", pm.changeActiveTab.bind(pm));
   command.on("session:reveal-in-side-bar", pm.revealInSideBar.bind(pm));
 
-  context.register(i18n.get("projectRemoveDirectory"), "removeDirectory", "root/directory/:id", pm.removeDirectory.bind(pm));
+  // TODO(fallaciousreasoning): Support context menus.
+  // context.register(i18n.get("projectRemoveDirectory"), "removeDirectory", "root/directory/:id", pm.removeDirectory.bind(pm));
 
   var setAutoHide = function() {
     var hide = Settings.get("user").autoHideProject;
