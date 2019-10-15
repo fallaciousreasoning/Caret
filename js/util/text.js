@@ -1,32 +1,19 @@
 define(function() {
   
   var cache = {};
-  var directory = null;
   
   return {
-    load: function(name, parentRequire, onLoad, config) {
-      if (name in cache) {
+    load: async function(name, parentRequire, onLoad, config) {
+      if (name in cache)
         return onLoad(cache[name]);
-      }
       
-      var getFile = function() {
-        directory.getFile(name, {create: false}, function(entry) {
-          entry.file(function(file) {
-            var reader = new FileReader();
-            reader.onloadend = function() {
-              cache[name] = reader.result;
-              onLoad(reader.result);
-            };
-            reader.readAsText(file);
-          });
-        });
-      };
+      const resolvedUrl = new URL(name, location.origin);
+      const response = await fetch(resolvedUrl);
+      const text = await response.text();
 
-      if (directory) return getFile();
-      chrome.runtime.getPackageDirectoryEntry(function(dir) {
-        directory = dir;
-        getFile();
-      });
+      cache[name] = text;
+
+      return onLoad(text);
     }
   };
   
