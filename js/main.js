@@ -15,8 +15,6 @@ require([
   //translate inline strings
   i18n.page();
 
-  var frame = chrome.app.window.current();
-
   //these are modules that must be loaded before init:complete
   var loadedModules = {
     "editor": false,
@@ -120,7 +118,7 @@ require([
         }
       }
     }
-    if (!cancelled) frame.close();
+    if (!cancelled) window.close();
   });
 
   //It's nice to be able to launch the debugger from a command stroke
