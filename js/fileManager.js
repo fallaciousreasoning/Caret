@@ -171,7 +171,7 @@ define([
     var data = await chromeP.storage.local.get("retained");
     var failures = [];
     var restored = [];
-    if (!data.retained || !data.retained.length) return;
+    if (!data || !data.retained || !data.retained.length) return;
     
     //convert raw retained IDs into typed retention objects
     var retained = data.retained.map(function(item) {
