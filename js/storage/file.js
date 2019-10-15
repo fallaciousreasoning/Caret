@@ -99,10 +99,10 @@ define([
     },
     
     retain: function() {
-      var id = chrome.fileSystem.retainEntry(this.entry);
+      // TODO(fallaciousreasoning): Add support for retaining files (probably by saving to indexeddb).
       return {
         type: "file",
-        id: id
+        id: undefined
       };
     },
     

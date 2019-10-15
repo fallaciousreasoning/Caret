@@ -100,11 +100,11 @@ define([
   Tab.prototype.drop = async function() {
     //let listeners know, like the project manager
     this._emit("close");
-    if (!this.file || !chrome.fileSystem.retainEntry) return;
+    if (!this.file) return;
     var id = this.file.retain();
     if (!id) return;
     var data = await chromeP.storage.local.get("retained");
-    if (!data.retained) return;
+    if (!data || !data.retained) return;
     var filtered = data.retained.filter(item => item != id);
     chrome.storage.local.set({ retained: filtered });  
   };
