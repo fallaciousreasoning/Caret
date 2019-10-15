@@ -21,11 +21,19 @@ define(function() {
     if (!translationsFile)
       return message;
 
-    const translation = translationsFile[message];
+    let translation = translationsFile[message];
     if (!translation)
       return message;
 
-    return translation.message ? translation.message : translation;
+    let result = translation.message ? translation.message : translation;
+
+    // Basic substitution support.
+    subs = subs || [];
+    for (let i = 0; i < subs.length; ++i) {
+      result = result.replace(new Regex(`\\$${i + 1}`), subs[i]);
+    }
+
+    return result;
   };
   
   return {
