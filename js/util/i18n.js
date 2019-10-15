@@ -14,10 +14,10 @@ define(function() {
     page: function() {
       document.querySelectorAll(".i18n").forEach(function(element) {
         var original = element.innerHTML;
-        var translated = chrome.i18n.getMessage(original);
+        var translated = getTranslatedMessage(original);
         if (translated) element.innerHTML = translated;
         var title = element.getAttribute("title") || "";
-        var translatedTitle = chrome.i18n.getMessage(title);
+        var translatedTitle = getTranslatedMessage(title);
         if (translatedTitle) element.setAttribute("title", translatedTitle);
       });
     },
