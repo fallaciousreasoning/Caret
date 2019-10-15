@@ -30,7 +30,7 @@ define(function() {
     // Basic substitution support.
     subs = subs || [];
     for (let i = 0; i < subs.length; ++i) {
-      result = result.replace(new Regex(`\\$${i + 1}`), subs[i]);
+      result = result.replace(new RegExp(`\\$${i + 1}`), subs[i]);
     }
 
     return result;
@@ -59,7 +59,7 @@ define(function() {
       if (!translationCache[message] || arguments.length > 1) {
         var subs = [];
         for (var i = 1; i < arguments.length; i++) subs.push(arguments[i]);
-        var translated = getTranslatedMessage(message);
+        var translated = getTranslatedMessage(message, subs);
         translationCache[message] = translated;
         return translated;
       }
