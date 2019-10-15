@@ -44,46 +44,22 @@ define([
     },
     
     write: async function(data) {
-      var self = this;
-      
-      if (!self.entry) {
-        //guard against cases where we accidentally write before opening
-        await self.open("save");
-        try {
-          await self.write(data);
-          ok();
-        } catch(err) {
-          fail(err);
-        }
-      };
-
-      var isWritable = await chromeP.fileSystem.isWritableEntry(this.entry);
-      if (!isWritable) {
-        var w = await chromeP.fileSystem.getWritableEntry(this.entry);
-        this.entry = w;
+      //guard against cases where we accidentally write before opening
+      if (!this.entry) {
+        await this.open('save');
       }
 
-      return new Promise((ok, fail) => {
-        this.entry.createWriter(function(writer) {
-          writer.onerror = function(err) {
-            console.error(err);
-            fail(err);
-          }
-          writer.onwriteend = function() {
-            //after truncation, actually write the file
-            writer.onwriteend = function() {
-              ok();
-              self.onWrite();
-            }
-            var blob = new Blob([data]);
-            writer.write(blob);
-          };
-          writer.truncate(0);
-        }, function(err) {
-          console.error(err);
-          fail(err);
-        });
-      });
+      var isWritable = this.entry.createWriter;
+      if (!isWritable) {
+        throw new Error('File is not writable');
+      }
+
+      const writer = await this.entry.createWriter({ createIfNotExists: true });
+      
+      const blob = new Blob([data]);
+      await writer.write(0, blob);
+      await writer.truncate(data.length);
+      await writer.close();
     },
     
     stat: function() {
