@@ -26,7 +26,7 @@ define([
   command.on("session:open-file", async function() {
     //have to call chooseEntry manually to support multiple files
     var args = {
-      type: "openWritableFile",
+      type: "openFile",
       acceptsMultiple: true
     };
     var files = await chromeP.fileSystem.chooseEntry(args);
