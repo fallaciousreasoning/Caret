@@ -2,10 +2,13 @@ define(function() {
 
   var translationCache = {};
 
+  // TODO(fallaciousreasoning): Support translations.
+  const getTranslatedMessage = (message, subs) => message;
+  
   return {
     //process a chunk of template HTML for i18n strings
     process: function(html) {
-      return html.replace(/__MSG_(\w+)__/g, (match, tag) => chrome.i18n.getMessage(tag));
+      return html.replace(/__MSG_(\w+)__/g, (match, tag) => getTranslatedMessage(tag));
     },
     //process the page for inline strings, marked with .i18n
     page: function() {
@@ -25,7 +28,7 @@ define(function() {
       if (!translationCache[message] || arguments.length > 1) {
         var subs = [];
         for (var i = 1; i < arguments.length; i++) subs.push(arguments[i]);
-        var translated = chrome.i18n.getMessage(message, subs) || message;
+        var translated = getTranslatedMessage(message);
         translationCache[message] = translated;
         return translated;
       }
