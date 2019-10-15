@@ -143,29 +143,8 @@ define([
     await Promise.all(completed);
     command.fire("init:restart");
   });
-  
-  command.on("settings:emergency-reset", async function() {
-    //unlike the menu item, let's confirm it here in case someone fat-fingers the menu/palette
-    await chromeP.notifications.clear("settings:emergency-reset-confirm");
-    await chrome.notifications.create("settings:emergency-reset-confirm", {
-      type: "basic",
-      iconUrl: "icon-128.png",
-      title: "Confirm Emergency Reset",
-      message: "This will wipe out all your settings and return Caret to its initial condition. Are you sure you want to do this?",
-      buttons: [
-        { title: "Yes, reset all data" },
-        { title: "Cancel emergency reset" }
-      ]
-    });
-  });
-  
-  chrome.notifications.onButtonClicked.addListener(async function(id, index) {
-    if (id != "settings:emergency-reset-confirm") return;
-    if (index !== 0) return;
-    await chromeP.notifications.clear("settings:emergency-reset-confirm");
-    var page = await chromeP.runtime.getBackgroundPage();
-    page.emergencyReset();
-  });
+
+  // TODO(fallaciousreasoning): Support resetting.
 
   return Settings;
 
