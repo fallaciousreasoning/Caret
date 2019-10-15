@@ -30,12 +30,8 @@ define(function() {
   var ch = {
     fileSystem: {
       chooseEntry: function(options) {
-        return new Promise(function(ok, fail) {
-          chrome.fileSystem.chooseEntry(options, function(entries) {
-            if (chrome.runtime.lastError) return fail(chrome.runtime.lastError);
-            ok(entries);
-          });
-        });
+        return window.chooseFileSystemEntries(options);
+
       },
       getDisplayPath: function(entry) {
         return new Promise(ok => chrome.fileSystem.getDisplayPath(entry, ok));
