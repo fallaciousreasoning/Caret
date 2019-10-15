@@ -63,19 +63,12 @@ define(function() {
       }
     },
 
+    // TODO(fallaciousreasoning): Completely remove this.
     runtime: {
-      getBackgroundPage: function() {
-        return new Promise(ok => chrome.runtime.getBackgroundPage(ok));
+      getPlatformInfo: async function() {
+        return { os: 'win' };
       },
-      getPlatformInfo: function() {
-        return new Promise(ok => chrome.runtime.getPlatformInfo(ok));
-      },
-      requestUpdateCheck: function() {
-        return new Promise(function(ok, fail) {
-          chrome.runtime.requestUpdateCheck(function(status, details) {
-            ok([status, details]);
-          });
-        })
+      requestUpdateCheck: async function() {
       },
       sendMessage: function(id, message, options) {
         return new Promise(function(ok, fail) {
