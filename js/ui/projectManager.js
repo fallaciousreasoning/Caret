@@ -72,7 +72,7 @@ define([
     },
 
     //walk will asynchronously collect the file tree
-    walk: async function(blacklist, done) {
+    walk: async function(blacklist, done, basePath) {
       for await (const entry of this.entry.getEntries()) {
         //skip dot dirs, but not files
         if (!Settings.get("user").showHiddenDirectories) {
@@ -85,7 +85,9 @@ define([
         }
 
         const node = new FSNode(entry);
-        node.displayPath = `${this.displayPath}/${entry.name}`;
+        entry.fullPath = basePath ? `${basePath}/${entry.name}` : entry.name;
+
+        node.displayPath = entry.fullPath;
         this.children.push(node);
 
         if (node.isDirectory)
