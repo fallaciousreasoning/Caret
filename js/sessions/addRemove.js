@@ -26,7 +26,7 @@ define([
       state.tabs.push(tab);
     }
     if (file && !file.virtual) {
-      file.entry.file(function(f) {
+      file.entry.getFile().then(f => {
         var loaded = i18n.get("fileLoaded", f.name, f.size);
         status.toast(loaded, 2);
       });
