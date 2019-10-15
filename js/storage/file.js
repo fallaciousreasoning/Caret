@@ -20,13 +20,13 @@ define([
       var self = this;
       //mode is "open" or "save"
       var modes = {
-        "open": "openWritableFile",
+        "open": "openFile",
         "save": "saveFile"
       };
       
       var entry = await chromeP.fileSystem.chooseEntry({ type: modes[mode] });
       //cancelling acts like an error, but isn't.
-      if (!entry) throw chrome.runtime.lastError;
+      if (!entry) throw Error('Failed to open file!');
       this.entry = entry;
     },
     
