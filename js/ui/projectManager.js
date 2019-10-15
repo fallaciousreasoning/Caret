@@ -171,7 +171,7 @@ define([
         var onFail = function() {
           this.loading = false;
           this.render();
-          chrome.storage.local.remove("retainedProject");
+          chromeP.storage.local.remove("retainedProject");
         }
         file.onWrite = this.watchProjectFile.bind(this);
         try {
@@ -441,7 +441,7 @@ define([
       //everything but "folders" is left as-is
       //run through all directories, retain them, and add to the structure
       project.folders = this.directories.map(function(node) {
-        var id = chrome.fileSystem.retainEntry(node.entry);
+        var id = chromeP.fileSystem.retainEntry(node.entry);
         return {
           retained: id,
           path: node.entry.fullPath
@@ -456,7 +456,7 @@ define([
         await file.open("save");
         await file.write(json);
         var id = file.retain();
-        chrome.storage.local.set({retainedProject: id});
+        chromeP.storage.local.set({retainedProject: id});
         file.onWrite = watch;
         this.projectFile = file;
       }
@@ -469,7 +469,7 @@ define([
       var data = await file.read();
       this.loadProject(data);
       var retained = file.retain();
-      chrome.storage.local.set({retainedProject: retained});
+      chromeP.storage.local.set({retainedProject: retained});
       this.projectFile = file;
       file.onWrite = this.watchProjectFile.bind(this);
     },
@@ -527,7 +527,7 @@ define([
       this.directories = [];
       this.project = {};
       Settings.clearProject();
-      if (!keepRetained) chrome.storage.local.remove("retainedProject");
+      if (!keepRetained) chromeP.storage.local.remove("retainedProject");
       this.render();
     },
 
