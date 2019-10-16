@@ -248,6 +248,8 @@ define([
   
   command.on("init:startup", init);
   
-  window.addEventListener("focus", command.fire.bind(null, "session:check-file"));
+  window.addEventListener("focus",
+    // There is a bug in the NativeFileSystemAPI where the last modified time is always now.
+    () => setTimeout(command.fire.bind(null, "session:check-file"), 100));
 
 });

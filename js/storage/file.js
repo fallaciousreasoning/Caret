@@ -17,7 +17,6 @@ define([
   
   File.prototype = {
     open: async function(mode) {
-      var self = this;
       //mode is "open" or "save"
       var modes = {
         "open": "openFile",
@@ -60,6 +59,8 @@ define([
       await writer.write(0, blob);
       await writer.truncate(data.length);
       await writer.close();
+
+      this.onWrite();
     },
     
     stat: function() {
