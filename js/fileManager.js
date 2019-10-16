@@ -107,6 +107,8 @@ define([
   };
 
   command.on("session:check-file", async function() {
+    // TODO(fallaciousreasoning): Reenable this. For now it is broken because FileSystemFileHandle.getFile().lastModified is always new Date().
+    return;
     if (Settings.get("user").disableReload) return;
     var tab = sessions.getCurrent();
     if (!tab.file || tab.file.virtual) return;
@@ -248,8 +250,6 @@ define([
   
   command.on("init:startup", init);
   
-  window.addEventListener("focus",
-    // There is a bug in the NativeFileSystemAPI where the last modified time is always now.
-    () => setTimeout(command.fire.bind(null, "session:check-file"), 100));
+  window.addEventListener("focus", command.fire.bind(null, "session:check-file"));
 
 });
