@@ -7,10 +7,10 @@ define(function() {
   (async () => {
     let lang = navigator.language.split('-')[0];
 
-    let response = await fetch(`/_locales/${lang}/messages.json`);
+    let response = await fetch(`_locales/${lang}/messages.json`);
     // Fallback to english for unsupported languages.
     if (!response.ok) {
-      response = await fetch(`/_locales/en/messages.json`)
+      response = await fetch(`_locales/en/messages.json`)
     }
 
     translationsFile = await response.json();
