@@ -7,7 +7,7 @@ define(function() {
       if (name in cache)
         return onLoad(cache[name]);
       
-      const resolvedUrl = new URL(name, location.origin);
+      const resolvedUrl = new URL(name, location.href);
       const response = await fetch(resolvedUrl);
       const text = await response.text();
 
