@@ -1,14 +1,17 @@
-# Caret Web
+Caret Web
+====
+
 This is a fork of https://github.com/thomaswilburn/Caret intended to run as a PWA (with offline support and native file system access). A live version is available on Github Pages https://fallaciousreasoning.github.io/Caret/.
 
 Currently requires Chrome with the Native File System API flag (native-file-system-api) flipped in order to work.
 
 There are a large number of Caret features I've disabled to get this working including but not limited to:
-- Context Menus (not sure how much work this will involve).
-- Reloading files when they have been updated on disk (The NativeFileSystemAPI always returns new Date() as the last modified date, which produces some weird behavior).
-- Asynchronous storage (currently I'm writing things to localStorage because it's easy).
-- All of the notifications stuff
-- Wiping data
+
+-  Context Menus (not sure how much work this will involve).
+-  Reloading files when they have been updated on disk (The NativeFileSystemAPI always returns new Date() as the last modified date, which produces some weird behavior).
+-  Asynchronous storage (currently I'm writing things to localStorage because it's easy).
+-  All of the notifications stuff
+-  Wiping data
 
 Caret
 =====
