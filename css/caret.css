@@ -294,6 +294,7 @@ a[target] {
   padding: 4px 8px;
   justify-content: space-between;
   position: relative;
+  cursor: default;
 }
 .toolbar li:hover:not(.top),
 .toolbar li.active {
