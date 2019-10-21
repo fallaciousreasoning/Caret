@@ -8,33 +8,38 @@ self.addEventListener('install', e => {
 });
 
 const getResponder = async (e) => {
-    const cachedPromise = caches.match(e.request);
-    const updatePromise = (async () => {
-        const newResponse = await fetch(e.request);
+    const cachePromise = caches.match(e.request);
+    const fetchPromise = fetch(e.request);
+
+    // Gets a promise returning a clone of the fetch request.
+    const getFetchResponseClone = () => fetchPromise.then(r => r.clone());
+
+    const update = async () => {
+        const responseToCache = await getFetchResponseClone();
 
         // Store a copy of the response in the cache, if it was ok.
-        if (newResponse.ok) {
+        if (responseToCache.ok) {
             const cache = await caches.open(CACHE_NAME);
-            await cache.put(e.request, newResponse.clone());
+            await cache.put(e.request, responseToCache);
         }
-
-        return newResponse;
-    })();
+    };
 
     // Always update whatever it is we tried to fetch.
-    e.waitUntil(updatePromise);
+    e.waitUntil(update());
 
-    // Get whichever one resolved first.
-    let response = await Promise.race([cachedPromise, updatePromise]);
+    const responseToReturn = getFetchResponseClone();
+    // If the cache doesn't have the request, try and fetch it from the network.
+    const cachedOrNetwork = cachePromise
+        .then(response => response || responseToReturn)
+        .catch(() => responseToReturn);
 
-    // If the promise wasn't in the cache, fetch from the network.
-    if (!response)
-      response = await updatePromise;
-    // Otherwise, if the network response wasn't okay, try serving from the cache.
-    else if (!response.ok)
-        response = await cachedPromise;
+    // If the network encounters an error, try and return a cached response.
+    const networkOrCache = responseToReturn
+        .catch(() => cachePromise);
 
-    return response;
+    // Promise.race throws an error if either promise rejects, so be careful
+    // that neither promise can throw.
+    return Promise.race([cachedOrNetwork, networkOrCache]);
 }
 
 self.addEventListener('fetch', e => {
