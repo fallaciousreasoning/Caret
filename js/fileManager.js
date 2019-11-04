@@ -107,8 +107,6 @@ define([
   };
 
   command.on("session:check-file", async function() {
-    // TODO(fallaciousreasoning): Reenable this. For now it is broken because FileSystemFileHandle.getFile().lastModified is always new Date().
-    return;
     if (Settings.get("user").disableReload) return;
     var tab = sessions.getCurrent();
     if (!tab.file || tab.file.virtual) return;
